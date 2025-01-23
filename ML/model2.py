@@ -221,16 +221,16 @@ print(f"Test accuracy: {test_accuracy:.2f}")
 
 # Example of new data input
 new_data = pd.DataFrame({
-    'O_score': [5.45],
+    'O_score': [7.45],
     'C_score': [8.67],
-    'E_score': [3.45],
-    'A_score': [5.34],
-    'N_score': [4.23],
-    'Numerical_Aptitude': [2.5], 
-    'Spatial_Aptitude': [2.0], 
-    'Perceptual_Aptitude': [2.5],
-    'Abstract_Reasoning': [2.5],
-    'Verbal_Reasoning': [2.3]
+    'E_score': [9.45],
+    'A_score': [6.34],
+    'N_score': [4.89],
+    'Numerical_Aptitude': [5.5], 
+    'Spatial_Aptitude': [6.0], 
+    'Perceptual_Aptitude': [8.5],
+    'Abstract_Reasoning': [7.5],
+    'Verbal_Reasoning': [9.3]
     
 })
 
