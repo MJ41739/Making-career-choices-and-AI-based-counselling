@@ -103,7 +103,8 @@ const getRandomQuestions = async (req, res) => {
 
 const submitTest = async (req,res) => {
     try {
-        let scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
+        // let scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
+        const { scores } = req.body;
         const response = await axios.post('http://localhost:5000/api/v1/questions/submitTest', { scores: scores });
         // console.log(response.data.prediction);
         console.log(response);
