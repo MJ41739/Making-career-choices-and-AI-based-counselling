@@ -153,8 +153,9 @@ def predict_career(input_data):
     
     # Prepare input data
     input_df = pd.DataFrame([input_data])
+    # print(input_df)
     input_df[columns_to_scale] = scaler.fit_transform(input_df[columns_to_scale])
-    
+    input_df[['O_score','C_score','E_score','A_score','N_score','Numerical_Aptitude', 'Spatial_Aptitude', 'Perceptual_Aptitude','Abstract_Reasoning','Verbal_Reasoning']] = scaler.fit_transform(input_df[['O_score','C_score','E_score','A_score','N_score','Numerical_Aptitude', 'Spatial_Aptitude', 'Perceptual_Aptitude','Abstract_Reasoning','Verbal_Reasoning']])
     # Make prediction
     prediction = model.predict(input_df)
     predicted_career_index = np.argmax(prediction)
@@ -167,16 +168,16 @@ def predict_career(input_data):
 def main():
     # Sample input data
     sample_input = {
-        'O_score': 7.45,
-        'C_score': 8.67,
-        'E_score': 9.45,
-        'A_score': 6.34,
-        'N_score': 4.89,
-        'Numerical_Aptitude': 5.5,
-        'Spatial_Aptitude': 6.0,
-        'Perceptual_Aptitude': 8.5,
-        'Abstract_Reasoning': 7.5,
-        'Verbal_Reasoning': 9.3
+    'O_score': 7.45,
+    'C_score': 8.67,
+    'E_score': 9.45,
+    'A_score': 6.34,
+    'N_score': 4.89,
+    'Numerical_Aptitude': 5.5, 
+    'Spatial_Aptitude': 6.0, 
+    'Perceptual_Aptitude': 8.5,
+    'Abstract_Reasoning': 7.5,
+    'Verbal_Reasoning': 9.3
     }
     
     career = predict_career(sample_input)
