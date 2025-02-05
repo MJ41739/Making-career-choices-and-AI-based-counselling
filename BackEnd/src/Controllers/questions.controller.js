@@ -105,7 +105,11 @@ const submitTest = async (req,res) => {
     try {
         // let scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
         const { scores } = req.body;
-        const response = await axios.post('https://ml-career-path.onrender.com/api/v1/questions/submitTest', { scores: scores });
+        const response = await axios.post('https://ml-career-path.onrender.com/api/v1/questions/submitTest', { scores: scores }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         // console.log(response.data.prediction);
         console.log(response);
         return res.status(200).json({
