@@ -163,6 +163,10 @@ with open('model.pkl', 'rb') as f:
 def home():
     return "Welcome to the ML Career Path app!"
 
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204  # No content, will avoid 404 errors for favicon
+
 @app.route('/api/v1/questions/submitTest', methods=['POST','GET'])
 def predict():
     career_mapping = {
