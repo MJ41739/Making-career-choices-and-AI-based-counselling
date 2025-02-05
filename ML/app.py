@@ -158,7 +158,10 @@ with open('model.pkl', 'rb') as f:
 # predicted_label = career_mapping_reversed.get(predicted_class, "Unknown Career")
 # # print(predicted_label)
 
-
+# Route for the homepage
+@app.route('/')
+def home():
+    return "Welcome to the ML Career Path app!"
 
 @app.route('/api/v1/questions/submitTest', methods=['POST','GET'])
 def predict():
