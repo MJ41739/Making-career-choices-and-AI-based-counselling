@@ -167,7 +167,7 @@ def home():
 def favicon():
     return '', 204  # No content, will avoid 404 errors for favicon
 
-@app.route('/api/v1/questions/submitTest', methods=['POST','GET'])
+@app.route('/api/v1/questions/submitTest', methods=['POST'])
 def predict():
     career_mapping = {
     'Accountant': 0,

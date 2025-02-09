@@ -100,16 +100,14 @@ const getRandomQuestions = async (req, res) => {
         });
     }
 };
-
+// const urll = "localhost:5000"
+const urll = "ml-career-path.onrender.com"
 const submitTest = async (req,res) => {
     try {
+        console.log("in backendddddd");
         // let scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
         const { scores } = req.body;
-        const response = await axios.post('https://ml-career-path.onrender.com/api/v1/questions/submitTest', { scores: scores }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await axios.post(`https://${urll}/api/v1/questions/submitTest`, { scores: scores });
         // console.log(response.data.prediction);
         console.log(response);
         return res.status(200).json({
@@ -118,6 +116,8 @@ const submitTest = async (req,res) => {
         });
         
     } catch (error) {
+        console.log("errrorrrrrr");
+        
         console.error(error);
     }
 };
