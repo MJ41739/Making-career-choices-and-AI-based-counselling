@@ -109,7 +109,7 @@ const submitTest = async (req,res) => {
         const { scores } = req.body;
         const response = await axios.post(`https://${urll}/api/v1/questions/submitTest`, { scores: scores });
         // console.log(response.data.prediction);
-        console.log(response);
+        console.log(response.data);
         return res.status(200).json({
             message: "Successfully submitted test",
             data: response.data.prediction
