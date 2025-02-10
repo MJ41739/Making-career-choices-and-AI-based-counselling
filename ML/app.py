@@ -4,7 +4,8 @@ import numpy as np
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://making-career-choices-and-ai-based.onrender.com/", "http://localhost:8000"])
+# CORS(app)
 with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
 
@@ -305,6 +306,7 @@ def predict():
     if 'scores' not in data:
         return jsonify({'error': 'Scores are required in the request body'}), 400
     scores = data['scores']
+    # scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
     # Reshape the data (this is to ensure the model receives 2D data, even for a single sample)
     scores_array = np.array(scores).reshape(1, -1)  # Shape: (1, 5)
     # scores = new_data['scores']
@@ -317,4 +319,4 @@ def predict():
     return jsonify({'prediction': predicted_label})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host="0.0.0.0",port=10000)
