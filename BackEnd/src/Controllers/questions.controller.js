@@ -29,6 +29,37 @@ const getQuestionsCountByCategory = async (req, res) => {
     }
 };
 
+const submit = async (req, res) => {
+    try {
+      const { answers } = req.body; // { "q1": "A", "q2": "B", ... }
+  
+      if (!answers || Object.keys(answers).length === 0) {
+        return res.status(400).json({ error: "No answers provided" });
+      }
+  
+      // Fetch all questions from the database
+      const questions = await Question.find();
+  
+      let score = 0;
+      let totalQuestions = questions.length;
+  
+      // Compare submitted answers with correct answers
+      questions.forEach((question) => {
+        const questionId = question._id.toString(); // Convert ObjectId to string
+        if (answers[questionId] && answers[questionId] === question.correctAnswer) {
+          score += 1; // Increase score if the answer is correct
+        }
+      });
+  
+      const percentage = ((score / totalQuestions) * 100).toFixed(2);
+  
+      res.json({ score, totalQuestions, percentage, message: "Test submitted successfully!" });
+    } catch (error) {
+      console.error("Error processing test:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
 const addQuestion = async (req,res) =>{
     const { questions } = req.body;
 
@@ -167,4 +198,4 @@ const submitTest = async (req,res) => {
 
 // }
 
-export {addQuestion, getQuestionsCountByCategory, getRandomQuestions, submitTest}
+export {addQuestion, getQuestionsCountByCategory, getRandomQuestions, submitTest, submit}

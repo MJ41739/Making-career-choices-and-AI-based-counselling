@@ -5,6 +5,7 @@ import cors from "cors";
 import connectDB from "./DB/index.js";
 import express from "express";
 import Question from "./Models/questions.models.js";
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -17,6 +18,8 @@ app.use(cors());
   
 import questionRouter from "./Routes/questions.routes.js";
 app.use("/api/v1/questions",questionRouter)
+ 
+
   
 
 connectDB()
