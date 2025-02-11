@@ -1,0 +1,146 @@
+/* Global styles */
+body {
+  background-color: #f4f4f9;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Test container */
+.test-container {
+  max-width: 800px;
+  margin: 2rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure the container takes up full width within max-width */
+  box-sizing: border-box;
+}
+
+/* Main heading */
+.test-heading {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Result section */
+.result-div {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.result-heading {
+  font-size: 1.5rem;
+  color: #007bff;
+  font-weight: 600;
+}
+
+.result-div p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Category heading */
+.category-heading {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: #007bff;
+  font-weight: 600;
+}
+
+/* Question container */
+.question-container {
+  margin-top: 1.5rem;
+}
+
+.question-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Options styling */
+.option-label {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.option-input {
+  margin-right: 0.5rem;
+}
+
+/* Button styling */
+button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+/* Specific button classes */
+.submit-btn {
+  background-color: #28a745;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+.next-btn {
+  background-color: #007bff;
+}
+
+.next-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Form and button responsiveness */
+@media (max-width: 600px) {
+  .test-container {
+    padding: 1rem;
+  }
+
+  .test-heading {
+    font-size: 1.5rem;
+  }
+
+  .category-heading {
+    font-size: 1.25rem;
+  }
+
+  button {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+}

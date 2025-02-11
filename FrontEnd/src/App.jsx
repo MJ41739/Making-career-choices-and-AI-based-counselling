@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import TestPage from "./pages/TestPage";
 import Results from "./pages/Results";
 import TestForm from "./components/TestForm";
-import "./index.css";
 
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/testform" element={<TestForm />} />
-        <Route path="/results" element={<Results />} />
+        {/* <Route path="/results" element={<Results />} /> */}
       </Routes>
     </Router>
   );
