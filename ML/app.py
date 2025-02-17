@@ -170,6 +170,9 @@ def favicon():
 
 @app.route('/api/v1/questions/submitTest', methods=['POST'])
 def predict():
+    print("Received API request:", request.url)  # Debugging statement
+    print("Request data:", request.json)  # Show incoming request body
+
     career_mapping = {
     'Accountant': 0,
     'Administrative Officer': 1,
@@ -305,10 +308,18 @@ def predict():
     data = request.get_json()
     if 'scores' not in data:
         return jsonify({'error': 'Scores are required in the request body'}), 400
-    scores = data['scores']
+     # ✅ Extract received scores and convert to a list
+    received_scores = list(request.json['scores'].values())
+
+    # ✅ Manually add hardcoded OCEAN personality scores (only values, no dictionary)
+    ocean_scores = [3.5, 4.2, 2.8, 3.9, 4.1]  # Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism
+
+    # ✅ Append OCEAN scores to the received scores
+    final_scores = ocean_scores + received_scores  # List concatenation
+    # scores = data['scores']
     # scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
     # Reshape the data (this is to ensure the model receives 2D data, even for a single sample)
-    scores_array = np.array(scores).reshape(1, -1)  # Shape: (1, 5)
+    scores_array = np.array(final_scores).reshape(1, -1)  # Shape: (1, 5)
     # scores = new_data['scores']
 
     prediction = model.predict(scores_array)

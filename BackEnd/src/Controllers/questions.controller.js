@@ -1,3 +1,4 @@
+import { response } from "express";
 import Question from "../Models/questions.models.js";
 import axios from "axios";
 
@@ -135,22 +136,59 @@ const getRandomQuestions = async (req, res) => {
 const urll = "ml-career-path.onrender.com"
 const submitTest = async (req,res) => {
     try {
-        console.log("in backendddddd");
-        // let scores  = [2.6,4.6,6.8,7.7,9.2,5.1,2.3,5.6,7.8,9.0]
-        const { scores } = req.body;
-        const response = await axios.post(`https://${urll}/api/v1/questions/submitTest`, { scores: scores });
-        // console.log(response.data.prediction);
-        console.log(response.data);
-        return res.status(200).json({
-            message: "Successfully submitted test",
-            data: response.data.prediction
+        const { answers } = req.body; // { "questionId1": "A", "questionId2": "B", ... }
+    
+        if (!answers || Object.keys(answers).length === 0) {
+          return res.status(400).json({ error: "No answers provided" });
+        }
+    
+        // Fetch all questions from the database
+        const questions = await Question.find();
+        
+        let scores = {}; // Object to store category-wise scores
+        let categoryTotals = {}; // Object to store total questions per category
+    
+        // Initialize category totals
+        questions.forEach((question) => {
+          const category = question.category;
+          if (!categoryTotals[category]) {
+            categoryTotals[category] = 0;
+            scores[category] = 0;
+          }
+          categoryTotals[category]++;
         });
+    
+        // Compare submitted answers with correct answers
+        questions.forEach((question) => {
+          const category = question.category;
+          const questionId = question._id.toString();
+          
+          if (answers[questionId] && answers[questionId] === question.correctAnswer) {
+            scores[category]++; // Increase category score if correct
+          }
+        });
+    
+        // Store category-wise scores (example: saving to MongoDB if needed)
+        // const testResult = new TestResult({
+        //   userId: req.user.id, // Assuming authentication
+        //   scores: scores,
+        // });
+    console.log("ressssss",scores);
+    
+        // await testResult.save();
+    
+        // Send scores to the ML Model API
+        const response = await axios.post("http://127.0.0.1:5000/api/v1/questions/submitTest", {
+          scores: scores,
+        });
+        console.log("resssssss",response.data.prediction);
         
-    } catch (error) {
-        console.log("errrorrrrrr");
-        
-        console.error(error);
-    }
+        res.json({ message: "Test submitted successfully!", data: response.data.prediction });
+    
+      } catch (error) {
+        console.error("Error processing test:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
 };
 
 

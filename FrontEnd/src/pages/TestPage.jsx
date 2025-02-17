@@ -63,12 +63,14 @@ const TestPage = () => {
     try {
       console.log("Submitted Answers:", answers);
 
-      const response = await axios.post("http://localhost:8000/api/v1/questions/submit", {
+      const response = await axios.post("http://localhost:8000/api/v1/questions/submitTest", {
         answers,
       });
 
-      console.log("Test Result:", response.data);
-      setResult(response.data);
+      console.log("Test Result:", response);
+      setResult(response.data.data);
+      console.log({result});
+      
     } catch (error) {
       console.error("Error submitting test:", error);
     }
@@ -88,7 +90,7 @@ const TestPage = () => {
       {result ? (
         <div className="result-div">
           <h3 className="result-heading">Test Results</h3>
-          <p>Score: {result.score} / {result.totalQuestions}</p>
+          <p>Recommended Career Path: {result}</p>
           <p>Percentage: {result.percentage}%</p>
           <p>{result.message}</p>
         </div>
