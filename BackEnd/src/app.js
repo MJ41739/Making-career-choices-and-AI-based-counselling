@@ -18,8 +18,10 @@ app.use(cors());
   
 import questionRouter from "./Routes/questions.routes.js";
 app.use("/api/v1/questions",questionRouter)
- 
-
+import answerRouter from "./Routes/answers.routes.js";
+app.use("/api/v1/answers", answerRouter)
+import userRouter from "./Routes/users.routes.js";
+app.use("/api/v1/users", userRouter)
   
 
 connectDB()

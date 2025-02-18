@@ -1,7 +1,61 @@
 import { response } from "express";
+import User from "../Models/users.models.js";
 import Question from "../Models/questions.models.js";
 import axios from "axios";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
+const userRegister = async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+  
+      // Check if user already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: "User already exists" });
+      }
+  
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create new user
+      const newUser = new User({ name, email, password: hashedPassword });
+      await newUser.save();
+  
+      res.status(201).json({ message: "User registered successfully!" });
+    } catch (error) {
+      console.error("Error registering user:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
+const userLogin = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+  
+      // Check if user exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+
+      // Verify password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign({ userId: user._id }, "your_secret_key", { expiresIn: "7d" });
+  
+      res.json({ token, userId: user._id });
+    } catch (error) {
+      console.error("Error logging in:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+  
 const getQuestionsCountByCategory = async (req, res) => {
     try {
         // Aggregate the questions by category and count the number of questions in each category
@@ -61,6 +115,31 @@ const submit = async (req, res) => {
     }
   };
 
+  const submitAnswer = async (req, res) => {
+    try {
+      const { questionId, selectedOption } = req.body;
+  
+      // Store answer to the database (e.g., UserAnswers collection)
+      const userAnswer = await UserAnswers.findOneAndUpdate(
+        { userId: req.user.id, questionId },
+        { selectedOption },
+        { upsert: true }
+      );
+  
+      // Optionally store the current question index as well to track progress
+      await UserProgress.findOneAndUpdate(
+        { userId: req.user.id },
+        { currentQuestionIndex: req.body.currentQuestionIndex },
+        { upsert: true }
+      );
+  
+      res.status(200).json({ message: "Answer saved successfully!" });
+    } catch (error) {
+      console.error("Error saving answer:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
 const addQuestion = async (req,res) =>{
     const { questions } = req.body;
 
@@ -114,7 +193,7 @@ const getRandomQuestions = async (req, res) => {
         for (let category of categories) {
             const categoryQuestions = await Question.aggregate([
                 { $match: { category } },  
-                { $sample: { size: 1 } }  
+                { $sample: { size: 10 } }  
             ]);
             
             selectedQuestions.push(...categoryQuestions); 
@@ -236,4 +315,4 @@ const submitTest = async (req,res) => {
 
 // }
 
-export {addQuestion, getQuestionsCountByCategory, getRandomQuestions, submitTest, submit}
+export {userRegister, userLogin, addQuestion, getQuestionsCountByCategory, getRandomQuestions, submitTest, submit, submitAnswer}

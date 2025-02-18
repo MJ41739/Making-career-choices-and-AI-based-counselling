@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import TestPage from "./pages/TestPage";
 import Results from "./pages/Results";
 import TestForm from "./components/TestForm";
+import Auth from "./pages/Auth";
 
 
 function App() {
@@ -10,9 +11,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Auth isSignup={true} />} />
+        <Route path="/login" element={<Auth isSignup={false} />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/testform" element={<TestForm />} />
-        {/* <Route path="/results" element={<Results />} /> */}
       </Routes>
     </Router>
   );
