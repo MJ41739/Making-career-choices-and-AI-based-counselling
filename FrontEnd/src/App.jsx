@@ -4,6 +4,8 @@ import TestPage from "./pages/TestPage";
 import Results from "./pages/Results";
 import TestForm from "./components/TestForm";
 import Auth from "./pages/Auth";
+import PrivateRoute from "./privateRoutes.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 
 function App() {
@@ -13,8 +15,13 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Auth isSignup={true} />} />
         <Route path="/login" element={<Auth isSignup={false} />} />
-        <Route path="/test" element={<TestPage />} />
-        <Route path="/testform" element={<TestForm />} />
+        
+          {/* Protected Routes */}
+          <Route element={<PrivateRoute />}>
+          <Route path="/test" element={<TestPage />} /> {/* Test page is protected */}
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        
       </Routes>
     </Router>
   );
