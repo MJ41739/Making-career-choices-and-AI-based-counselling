@@ -55,7 +55,7 @@ const TestPage = () => {
 
     if (currentQuestionIndex < totalQuestionsInCategory - 1) {
       // Move to the next question in the current category
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
     storeProgress(answers, nextIndex); // Save progress after moving to the next question
         // Submit the answer to the backend as the user moves to the next question
@@ -84,9 +84,9 @@ const TestPage = () => {
         answers,
       });
 
-      console.log("Test Result:", response);
+      // console.log("Test Result:", response.data.data.prediction);
       setResult(response.data.data);
-      console.log({result});
+      // console.log({result});
       
     } catch (error) {
       console.error("Error submitting test:", error);
@@ -96,6 +96,8 @@ const TestPage = () => {
   // Send the answer to the backend (after each question)
   const submitAnswer = async () => {
     try {
+      console.log(questions[currentQuestionIndex]);
+      
       const currentQuestion = questions[currentQuestionIndex];
       const answer = answers[currentQuestion._id];
       await axios.post("http://localhost:8000/api/v1/answers/submitAnswer", {
@@ -121,8 +123,8 @@ const TestPage = () => {
       {result ? (
         <div className="result-div">
           <h3 className="result-heading">Test Results</h3>
-          <p>Recommended Career Path: {result}</p>
-          <p>Percentage: {result.percentage}%</p>
+          <p>Recommended Career Path: {result.prediction}</p>
+          {/* <p>Percentage: {result.overallPercentage }%</p> */}
           <p>{result.message}</p>
         </div>
       ) : (

@@ -213,62 +213,93 @@ const getRandomQuestions = async (req, res) => {
 };
 // const urll = "localhost:5000"
 const urll = "ml-career-path.onrender.com"
-const submitTest = async (req,res) => {
-    try {
-        const { answers } = req.body; // { "questionId1": "A", "questionId2": "B", ... }
-    
-        if (!answers || Object.keys(answers).length === 0) {
-          return res.status(400).json({ error: "No answers provided" });
-        }
-    
-        // Fetch all questions from the database
-        const questions = await Question.find();
-        
-        let scores = {}; // Object to store category-wise scores
-        let categoryTotals = {}; // Object to store total questions per category
-    
-        // Initialize category totals
-        questions.forEach((question) => {
-          const category = question.category;
-          if (!categoryTotals[category]) {
-            categoryTotals[category] = 0;
-            scores[category] = 0;
-          }
-          categoryTotals[category]++;
-        });
-    
-        // Compare submitted answers with correct answers
-        questions.forEach((question) => {
-          const category = question.category;
-          const questionId = question._id.toString();
-          
-          if (answers[questionId] && answers[questionId] === question.correctAnswer) {
-            scores[category]++; // Increase category score if correct
-          }
-        });
-    
-        // Store category-wise scores (example: saving to MongoDB if needed)
-        // const testResult = new TestResult({
-        //   userId: req.user.id, // Assuming authentication
-        //   scores: scores,
-        // });
-    console.log("ressssss",scores);
-    
-        // await testResult.save();
-    
-        // Send scores to the ML Model API
-        const response = await axios.post("http://127.0.0.1:5000/api/v1/questions/submitTest", {
-          scores: scores,
-        });
-        console.log("resssssss",response.data.prediction);
-        
-        res.json({ message: "Test submitted successfully!", data: response.data.prediction });
-    
-      } catch (error) {
-        console.error("Error processing test:", error);
-        res.status(500).json({ error: "Internal server error" });
+const submitTest = async (req, res) => {
+  try {
+    const { answers } = req.body; // { "questionId1": "A", "questionId2": "B", ... }
+
+    if (!answers || Object.keys(answers).length === 0) {
+      return res.status(400).json({ error: "No answers provided" });
+    }
+
+    // Fetch all questions from the database
+    const questions = await Question.find();
+
+    let scores = {}; // Object to store category-wise scores
+    let categoryTotals = {}; // Object to store total questions per category
+
+    // Initialize category totals
+    questions.forEach((question) => {
+      const category = question.category;
+      if (!categoryTotals[category]) {
+        categoryTotals[category] = 0;
+        scores[category] = 0;
       }
+      categoryTotals[category]++;
+    });
+
+    // Compare submitted answers with correct answers
+    questions.forEach((question) => {
+      const category = question.category;
+      const questionId = question._id.toString();
+
+      if (answers[questionId] && answers[questionId] === question.correctAnswer) {
+        scores[category]++; // Increase category score if correct
+      }
+    });
+
+    // Calculate percentages for each category
+    let categoryPercentages = {};
+    let totalScore = 0;
+    let totalQuestions = 0;
+
+    for (const category in scores) {
+      const score = scores[category];
+      const total = categoryTotals[category];
+      
+      // Calculate percentage for each category
+      categoryPercentages[category] = (score / total) * 100;
+
+      // Add to total score and total questions for overall percentage
+      totalScore += score;
+      totalQuestions += total;
+    }
+
+    // Calculate overall percentage
+    const overallPercentage = (totalScore / totalQuestions) * 100;
+
+    // Store category-wise scores (example: saving to MongoDB if needed)
+    // const testResult = new TestResult({
+    //   userId: req.user.id, // Assuming authentication
+    //   scores: scores,
+    // });
+    console.log("Category Scores:", scores);
+    console.log("Category Percentages:", categoryPercentages);
+    console.log("Overall Percentage:", overallPercentage);
+
+    // await testResult.save();
+
+    // Send scores to the ML Model API
+    const response = await axios.post("http://127.0.0.1:5000/api/v1/questions/submitTest", {
+      scores: scores,
+    });
+    console.log("ML Model Response:", response.data);
+
+    // Return the percentage and prediction from the ML Model API
+    res.json({
+      message: "Test submitted successfully!",
+      data: {
+        prediction: response.data.prediction,
+        overallPercentage: overallPercentage,
+        categoryPercentages: categoryPercentages,
+      },
+    });
+
+  } catch (error) {
+    console.error("Error processing test:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
+
 
 
 
