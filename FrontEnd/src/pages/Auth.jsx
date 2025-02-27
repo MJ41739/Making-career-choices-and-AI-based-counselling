@@ -22,7 +22,7 @@ const Auth = ({ isSignup = false }) => {
 
     try {
       const endpoint = isSignup ? "/api/v1/users/register" : "/api/v1/users/login";
-      const response = await axios.post(`http://localhost:8000${endpoint}`, formData);
+      const response = await axios.post(`https://making-career-choices-and-ai-based.onrender.com${endpoint}`, formData);
 
       console.log("Response:", response.data);
 

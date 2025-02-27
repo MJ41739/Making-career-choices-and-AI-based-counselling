@@ -80,7 +80,7 @@ const TestPage = () => {
     try {
       console.log("Submitted Answers:", answers);
 
-      const response = await axios.post("http://localhost:8000/api/v1/questions/submitTest", {
+      const response = await axios.post("https://making-career-choices-and-ai-based.onrender.com/api/v1/questions/submitTest", {
         answers,
       });
 
@@ -100,7 +100,7 @@ const TestPage = () => {
       
       const currentQuestion = questions[currentQuestionIndex];
       const answer = answers[currentQuestion._id];
-      await axios.post("http://localhost:8000/api/v1/answers/submitAnswer", {
+      await axios.post("https://making-career-choices-and-ai-based.onrender.com/api/v1/answers/submitAnswer", {
         questionId: currentQuestion._id,
         selectedOption: answer,
       });
