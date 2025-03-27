@@ -80,12 +80,14 @@ const TestPage = () => {
     try {
       console.log("Submitted Answers:", answers);
 
-      const response = await axios.post("https://making-career-choices-and-ai-based.onrender.com/api/v1/questions/submitTest", {
+      const response = await axios.post("http://localhost:8000/api/v1/questions/submitTest", {
         answers,
       });
 
       // console.log("Test Result:", response.data.data.prediction);
       setResult(response.data.data);
+      console.log(response);
+      
       // console.log({result});
       
     } catch (error) {
@@ -100,7 +102,7 @@ const TestPage = () => {
       
       const currentQuestion = questions[currentQuestionIndex];
       const answer = answers[currentQuestion._id];
-      await axios.post("https://making-career-choices-and-ai-based.onrender.com/api/v1/answers/submitAnswer", {
+      await axios.post("http://localhost:8000/api/v1/answers/submitAnswer", {
         questionId: currentQuestion._id,
         selectedOption: answer,
       });
@@ -121,13 +123,17 @@ const TestPage = () => {
       <h2 className="test-heading">Aptitude Test</h2>
   
       {result ? (
-        <div className="result-div">
-          <h3 className="result-heading">Test Results</h3>
-          <p>Recommended Career Path: {result.prediction}</p>
-          {/* <p>Percentage: {result.overallPercentage }%</p> */}
-          <p>{result.message}</p>
-        </div>
-      ) : (
+    <div className="result-div">
+        <h3 className="result-heading">Test Results</h3>
+        <p><strong>Recommended Career Path:</strong> {result.prediction}</p>
+        <p><strong>Total Questions:</strong> {result.totalQuestions}</p>
+        <p><strong>Attempted Questions:</strong> {result.attemptedQuestions}</p>
+        <p><strong>Correct Answers:</strong> {result.correctAnswers}</p>
+        <p><strong>Wrong Answers:</strong> {result.wrongAnswers}</p>
+        <p><strong>Percentage:</strong> {result.overallPercentage}%</p>
+        <p>{result.message}</p>
+    </div>
+) : (
         <form onSubmit={handleSubmit}>
           <h3 className="category-heading">{currentCategory}</h3>
           <div className="question-container">

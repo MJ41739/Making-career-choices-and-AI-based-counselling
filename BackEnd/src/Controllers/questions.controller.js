@@ -185,7 +185,7 @@ const addQuestion = async (req,res) =>{
     
 
 }
-
+let fetchedquestions = 0;
 const getRandomQuestions = async (req, res) => {
     const categories = ['Numerical Ability', 'Verbal Ability', 'Logical Reasoning', 'Cognitive Ability','Spatial Reasoning'];
     const selectedQuestions = [];
@@ -193,12 +193,12 @@ const getRandomQuestions = async (req, res) => {
         for (let category of categories) {
             const categoryQuestions = await Question.aggregate([
                 { $match: { category } },  
-                { $sample: { size: 10 } }  
+                { $sample: { size: 2 } }  
             ]);
             
             selectedQuestions.push(...categoryQuestions); 
         }
-
+        fetchedquestions = selectedQuestions.length;
         return res.status(200).json({
             message: "Successfully fetched random questions",
             data: selectedQuestions
@@ -211,8 +211,8 @@ const getRandomQuestions = async (req, res) => {
         });
     }
 };
-// const urll = "localhost:5000"
-const urll = "ml-career-path.onrender.com"
+const urll = "localhost:5000"
+// const urll = "ml-career-path.onrender.com"
 const submitTest = async (req, res) => {
   try {
     const { answers } = req.body; // { "questionId1": "A", "questionId2": "B", ... }
@@ -226,6 +226,11 @@ const submitTest = async (req, res) => {
 
     let scores = {}; // Object to store category-wise scores
     let categoryTotals = {}; // Object to store total questions per category
+
+    let totalQuestions = fetchedquestions;
+    let attemptedQuestions = 0;
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
 
     // Initialize category totals
     questions.forEach((question) => {
@@ -242,41 +247,42 @@ const submitTest = async (req, res) => {
       const category = question.category;
       const questionId = question._id.toString();
 
-      if (answers[questionId] && answers[questionId] === question.correctAnswer) {
-        scores[category]++; // Increase category score if correct
+      if (answers[questionId]) {
+        attemptedQuestions++; // Count attempted questions
+        if (answers[questionId] === question.correctAnswer) {
+          scores[category]++; // Increase category score if correct
+          correctAnswers++;
+        } else {
+          wrongAnswers++;
+        }
       }
     });
 
     // Calculate percentages for each category
     let categoryPercentages = {};
     let totalScore = 0;
-    let totalQuestions = 0;
 
     for (const category in scores) {
       const score = scores[category];
       const total = categoryTotals[category];
       
       // Calculate percentage for each category
-      categoryPercentages[category] = (score / total) * 100;
+      categoryPercentages[category] = ((score / total) * 100).toFixed(2);
 
-      // Add to total score and total questions for overall percentage
+      // Add to total score
       totalScore += score;
-      totalQuestions += total;
     }
 
     // Calculate overall percentage
-    const overallPercentage = (totalScore / totalQuestions) * 100;
+    const overallPercentage = ((correctAnswers / totalQuestions) * 100).toFixed(2);
 
-    // Store category-wise scores (example: saving to MongoDB if needed)
-    // const testResult = new TestResult({
-    //   userId: req.user.id, // Assuming authentication
-    //   scores: scores,
-    // });
     console.log("Category Scores:", scores);
     console.log("Category Percentages:", categoryPercentages);
     console.log("Overall Percentage:", overallPercentage);
-
-    // await testResult.save();
+    console.log("Total Questions:", totalQuestions);
+    console.log("Attempted Questions:", attemptedQuestions);
+    console.log("Correct Answers:", correctAnswers);
+    console.log("Wrong Answers:", wrongAnswers);
 
     // Send scores to the ML Model API
     const response = await axios.post("http://127.0.0.1:5000/api/v1/questions/submitTest", {
@@ -284,13 +290,17 @@ const submitTest = async (req, res) => {
     });
     console.log("ML Model Response:", response.data);
 
-    // Return the percentage and prediction from the ML Model API
+    // Return the final result
     res.json({
       message: "Test submitted successfully!",
       data: {
         prediction: response.data.prediction,
-        overallPercentage: overallPercentage,
-        categoryPercentages: categoryPercentages,
+        totalQuestions,
+        attemptedQuestions,
+        correctAnswers,
+        wrongAnswers,
+        overallPercentage,
+        categoryPercentages,
       },
     });
 
@@ -299,6 +309,7 @@ const submitTest = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 

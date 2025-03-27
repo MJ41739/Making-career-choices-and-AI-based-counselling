@@ -15,7 +15,7 @@ const TestForm = ({ questions }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://making-career-choices-and-ai-based.onrender.com/api/v1/submit", {
+      const response = await axios.post("http://localhost:8000/api/v1/submit", {
         answers,
       });
 
