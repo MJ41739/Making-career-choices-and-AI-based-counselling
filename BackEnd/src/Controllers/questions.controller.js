@@ -193,7 +193,7 @@ const getRandomQuestions = async (req, res) => {
         for (let category of categories) {
             const categoryQuestions = await Question.aggregate([
                 { $match: { category } },  
-                { $sample: { size: 2 } }  
+                { $sample: { size: 10 } }  
             ]);
             
             selectedQuestions.push(...categoryQuestions); 
