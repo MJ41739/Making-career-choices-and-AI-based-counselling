@@ -1,6 +1,7 @@
 import { response } from "express";
 import User from "../Models/users.models.js";
 import Question from "../Models/questions.models.js";
+import TestResult from "../Models/testResults.models.js";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -33,7 +34,6 @@ const userLogin = async (req, res) => {
     try {
       const { email, password } = req.body;
   
-  
       // Check if user exists
       const user = await User.findOne({ email });
       if (!user) {
@@ -49,7 +49,7 @@ const userLogin = async (req, res) => {
       // Generate JWT token
       const token = jwt.sign({ userId: user._id }, "your_secret_key", { expiresIn: "7d" });
   
-      res.json({ token, userId: user._id });
+      res.json({ token, userId: user._id, email});
     } catch (error) {
       console.error("Error logging in:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -303,6 +303,19 @@ const submitTest = async (req, res) => {
         categoryPercentages,
       },
     });
+
+    const testResult = new TestResult({
+      email: req.body.email,
+      totalQuestions: totalQuestions,
+      attemptedQuestions: attemptedQuestions,
+      correctAnswers: correctAnswers,
+      wrongAnswers: wrongAnswers,
+      categoryScores: scores, // from your logic
+      overallPercentage: overallPercentage,
+      careerPrediction: response.data.prediction, // from ML model
+    });
+
+    await testResult.save();
 
   } catch (error) {
     console.error("Error processing test:", error);

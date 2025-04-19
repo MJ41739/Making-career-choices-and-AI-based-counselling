@@ -32,6 +32,7 @@ const Auth = ({ isSignup = false }) => {
       } else {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("email", response.data.email);
         alert("Login successful! Redirecting to dashboard...");
         navigate("/dashboard"); // ✅ Redirect to dashboard after login
       }

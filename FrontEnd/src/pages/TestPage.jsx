@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchQuestions } from "../api/testApi";
 import axios from "axios";
 import "./TestPage.css"
+import { useNavigate } from "react-router-dom";
+
 
 // Save answers and current question index in localStorage
 const storeProgress = (answers, currentIndex) => {
@@ -17,6 +19,7 @@ const getStoredProgress = () => {
 };
 
 const TestPage = () => {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState({});
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -49,6 +52,10 @@ const TestPage = () => {
     getQuestions();
   }, []);
 
+  const gotoprofile = () => {
+    const email = localStorage.getItem("email");
+    navigate('/history');
+  }
   const handleNext = () => {
     const currentCategory = categories[currentCategoryIndex];
     const totalQuestionsInCategory = questions[currentCategory].length;
@@ -79,9 +86,9 @@ const TestPage = () => {
     e.preventDefault();
     try {
       console.log("Submitted Answers:", answers);
-
+      const email = localStorage.getItem("email");
       const response = await axios.post("http://localhost:8000/api/v1/questions/submitTest", {
-        answers,
+        answers,email,
       });
 
       // console.log("Test Result:", response.data.data.prediction);
@@ -132,6 +139,7 @@ const TestPage = () => {
         <p><strong>Wrong Answers:</strong> {result.wrongAnswers}</p>
         <p><strong>Percentage:</strong> {result.overallPercentage}%</p>
         <p>{result.message}</p>
+        <button onClick={gotoprofile}>Go to Profile</button>
     </div>
 ) : (
         <form onSubmit={handleSubmit}>

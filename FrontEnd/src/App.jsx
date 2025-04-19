@@ -6,6 +6,7 @@ import TestForm from "./components/TestForm";
 import Auth from "./pages/Auth";
 import PrivateRoute from "./privateRoutes.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Profile from "./pages/Profile.jsx";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route element={<PrivateRoute />}>
           <Route path="/test" element={<TestPage />} /> {/* Test page is protected */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/history" element={<Profile />}/>
         </Route>
         
       </Routes>

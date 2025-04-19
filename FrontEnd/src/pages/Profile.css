@@ -1,0 +1,42 @@
+.profile-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  .profile-container h2{
+    text-align: center;
+  }
+  .test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .test-entry {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .test-item {
+    min-width: 180px;
+    font-size: 14px;
+  }
+  
+  .category-scores ul {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+  }
+  
+  .category-scores li {
+    font-size: 13px;
+    margin: 2px 0;
+  }
+  

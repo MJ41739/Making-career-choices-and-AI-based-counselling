@@ -1,5 +1,6 @@
 body{
     background: linear-gradient(135deg, #667eea, #764ba2);
+    height: max-content;
 }
 .auth-container {
     display: flex;

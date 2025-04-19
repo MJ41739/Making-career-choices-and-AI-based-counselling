@@ -8,7 +8,12 @@ import Question from "./Models/questions.models.js";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',  // allow frontend origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // allow needed methods
+    credentials: true, // optional if you're using cookies or auth
+  }));
+app.options('*', cors());  
 
 // const questionData = {
 //     question: 'What is the capital of France?',
