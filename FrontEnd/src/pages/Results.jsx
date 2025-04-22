@@ -4,8 +4,8 @@ import axios from "axios";
 const Results = () => {
   const [result, setResult] = useState(null);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/results").then((res) => {
+  useEffect(() => {//http://localhost:5000/api/results
+    axios.get("https://ml-career-path.onrender.com/api/results").then((res) => {
       setResult(res.data);
     });
   }, []);

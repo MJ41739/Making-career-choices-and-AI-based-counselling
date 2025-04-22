@@ -285,7 +285,7 @@ const submitTest = async (req, res) => {
     console.log("Wrong Answers:", wrongAnswers);
 
     // Send scores to the ML Model API
-    const response = await axios.post("http://127.0.0.1:5000/api/v1/questions/submitTest", {
+    const response = await axios.post("https://ml-career-path.onrender.com/api/v1/questions/submitTest", {
       scores: scores,
     });
     console.log("ML Model Response:", response.data);
